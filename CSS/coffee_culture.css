@@ -36,10 +36,64 @@ body {
     background-color: #2980b9;
     color: #ffffff;
 }
-
 .main-section {
     padding: 20px;
     text-align: center;
+}
+
+.maquina-section {
+    padding: 20px;
+    text-align: center;
+}
+
+.maquina-item {
+    border: 1px solid #3498db;
+    border-radius: 1em;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    text-align: left;
+    max-width: 250px;
+}
+.img_home{
+    border-radius: 1em;
+}
+
+img{
+    mix-blend-mode:multiply;
+}
+.maquina-img1 {
+    width: 30%;
+    padding-left: 34%;
+    border-radius: 0.5em;
+}
+.maquina-img2 {
+    width: 54%;
+    padding-left: 24%;
+    border-radius: 0.5em;
+}
+.maquina-img3 {
+    width: 54%;
+    padding-left: 24%;
+    border-radius: 0.5em;
+}
+.maquina-img4 {
+    width: 41%;
+    padding-left: 30%;
+    border-radius: 0.5em;
+}
+.maquina-type {
+    font-weight: bold;
+}
+
+.maquina-model {
+    margin-top: 8px;
+}
+
+.maquina-value {
+    margin-top: 8px;
+    font-weight: bold;
+    color: #e74c3c;
 }
 
 .coffee-footer {
@@ -50,7 +104,4 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-}
-.img_home{
-    border-radius: 1em;
 }
