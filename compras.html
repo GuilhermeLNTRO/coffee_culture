@@ -4,8 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/coffee_culture.css">
-    <title>Coffee Culture</title>
+    <title>Coffee Culture - Compras</title>
+    <style>
+        /* Estilos CSS do seu código original permanecem inalterados */
+
+        .compras-section {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .quadro {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 1em;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .qrcode-img {
+            width: 150px;
+            height: 150px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,6 +51,218 @@
         <a href="maquinas.html" class="coffee-nav-item">Máquinas</a>
         <a href="compras.html" class="coffee-nav-item">Compras</a>
     </nav>
-    
+
+    <section class="compras-section">
+        <form id="compras-form">
+
+            <div class="quadro">
+                <h2>Dados de Identificação</h2>
+                <div class="form-group">
+                    <label for="nome" class="label">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="cpf" class="label">CPF:</label>
+                    <input type="text" id="cpf" name="cpf" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone" class="label">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="label">E-mail:</label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="endereco" class="label">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco" required>
+                </div>
+            </div>
+
+            <div class="quadro">
+                <h2>Produtos</h2>
+                <div class="form-group">
+                    <label for="maquinas" class="label">Máquinas:</label>
+                    <select id="maquinas" name="maquinas">
+                        <option value="EspressoDeluxe">Espresso Deluxe</option>
+                        <option value="BaristaPro">Barista Pro</option>
+                        <option value="CitiZPrata">CitiZ Prata</option>
+                        <option value="TurboShot">TurboShot</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="saches" class="label">Sachês:</label>
+                    <select id="saches" name="saches">
+                        <optgroup label="Dolce Gusto">
+                            <option value="Expresso">Expresso</option>
+                            <option value="Descafeinado">Descafeinado</option>
+                        </optgroup>
+                        <optgroup label="Senseo">
+                            <option value="Classico">Clássico</option>
+                            <option value="Intenso">Intenso</option>
+                        </optgroup>
+                        <optgroup label="Nespresso">
+                            <option value="Livanto">Livanto</option>
+                            <option value="Ristretto">Ristretto</option>
+                            <option value="Vanillo">Vanillo</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button type="button" onclick="adicionarProduto()">Selecionados</button>
+                <div id="produtos-selecionados"></div>
+                <div>Total: <span id="total">0</span></div>
+            </div>
+
+            <div class="quadro">
+                <h2>Forma de Pagamento</h2>
+                <div class="form-group">
+                    <input type="radio" id="cartao" name="formaPagamento" value="cartao">
+                    <label for="cartao" class="label">Cartão</label>
+                    <input type="radio" id="pix" name="formaPagamento" value="pix">
+                    <label for="pix" class="label">Pix</label>
+                    <input type="radio" id="boleto" name="formaPagamento" value="boleto">
+                    <label for="boleto" class="label">Boleto</label>
+                </div>
+                <div id="cartao-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="numeroCartao" class="label">Número do Cartão:</label>
+                        <input type="text" id="numeroCartao" name="numeroCartao">
+                    </div>
+                    <div id="bandeira"></div>
+                </div>
+                <div id="pix-details" style="display: none;">
+                    <p>Escanear o QRCode abaixo com o app do banco para realizar o pagamento:</p>
+                    <img src="" alt="QRCode Pix" id="qrcode" class="qrcode-img">
+                </div>
+                <div id="boleto-details" style="display: none;">
+                    <p>Desculpe, mas o pagamento via boleto não está mais disponível.</p>
+                </div>
+            </div>
+
+            <button type="button" onclick="enviarCompra()">Enviar</button>
+            <button type="button" onclick="limparCampos()">Limpar</button>
+
+        </form>
+    </section>
+
+    <footer class="coffee-footer">
+        <p>&copy; 2023 Coffee Culture</p>
+    </footer>
+
+    <script>
+        function adicionarProduto() {
+            // Lógica para adicionar produtos selecionados ao carrinho
+            var maquinaSelecionada = document.getElementById("maquinas").value;
+            var sacheSelecionado = document.getElementById("saches").value;
+            var produtosSelecionados = document.getElementById("produtos-selecionados");
+
+            var divProduto = document.createElement("div");
+            divProduto.textContent = maquinaSelecionada + " - " + sacheSelecionado;
+
+            produtosSelecionados.appendChild(divProduto);
+
+            // Lógica para atualizar o total
+            var totalElement = document.getElementById("total");
+            var totalAtual = parseFloat(totalElement.textContent);
+            totalElement.textContent = totalAtual + obterValorProduto(maquinaSelecionada, sacheSelecionado);
+        }
+
+        function obterValorProduto(maquina, sache) {
+            // Lógica para obter o valor do produto selecionado
+            // Você pode implementar uma lógica mais complexa aqui dependendo dos produtos
+            // Este exemplo assume um valor fixo para cada produto
+            var valores = {
+                EspressoDeluxe: {
+                    Expresso: 50,
+                    Descafeinado: 60
+                },
+                BaristaPro: {
+                    Expresso: 70,
+                    Descafeinado: 80
+                },
+                CitiZPrata: {
+                    Expresso: 90,
+                    Descafeinado: 100
+                },
+                TurboShot: {
+                    Expresso: 110,
+                    Descafeinado: 120
+                }
+            };
+
+            return valores[maquina][sache];
+        }
+
+        function atualizarBandeira() {
+            // Lógica para determinar a bandeira do cartão com base no número do cartão
+            var numeroCartao = document.getElementById("numeroCartao").value;
+            var bandeiraDiv = document.getElementById("bandeira");
+
+            if (/^4/.test(numeroCartao)) {
+                bandeiraDiv.textContent = "Bandeira: Visa";
+            } else if (/^5/.test(numeroCartao)) {
+                bandeiraDiv.textContent = "Bandeira: Mastercard";
+            } else if (/^3[47]/.test(numeroCartao)) {
+                bandeiraDiv.textContent = "Bandeira: American Express";
+            } else {
+                bandeiraDiv.textContent = "";
+            }
+        }
+
+        function exibirDetalhesPagamento() {
+            // Lógica para exibir os detalhes do tipo de pagamento selecionado
+            var formaPagamento = document.querySelector('input[name="formaPagamento"]:checked').value;
+
+            var cartaoDetails = document.getElementById("cartao-details");
+            var pixDetails = document.getElementById("pix-details");
+            var boletoDetails = document.getElementById("boleto-details");
+
+            if (formaPagamento === "cartao") {
+                cartaoDetails.style.display = "block";
+                pixDetails.style.display = "none";
+                boletoDetails.style.display = "none";
+            } else if (formaPagamento === "pix") {
+                cartaoDetails.style.display = "none";
+                pixDetails.style.display = "block";
+                boletoDetails.style.display = "none";
+
+                // Lógica para gerar o QRCode do Pix
+                var qrcodeImg = document.getElementById("qrcode");
+                // Substitua a URL abaixo pela lógica real de geração de QRCode
+                qrcodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=150x150";
+            } else if (formaPagamento === "boleto") {
+                cartaoDetails.style.display = "none";
+                pixDetails.style.display = "none";
+                boletoDetails.style.display = "block";
+            }
+        }
+
+        function enviarCompra() {
+            // Lógica para enviar o formulário (pode ser substituída por AJAX para interação com o servidor)
+            alert("Compra realizada com sucesso! Obrigado pela sua compra!");
+        }
+
+        function limparCampos() {
+            // Lógica para limpar todos os campos do formulário
+            document.getElementById("compras-form").reset();
+
+            // Lógica para limpar os campos específicos que podem não ser cobertos pelo reset()
+            document.getElementById("produtos-selecionados").innerHTML = "";
+            document.getElementById("total").textContent = "0";
+            document.getElementById("bandeira").textContent = "";
+
+            // Resetar detalhes de pagamento
+            document.getElementById("cartao-details").style.display = "none";
+            document.getElementById("pix-details").style.display = "none";
+            document.getElementById("boleto-details").style.display = "none";
+        }
+
+        // Adicionar eventos para atualizar a bandeira do cartão e exibir detalhes do pagamento
+        document.getElementById("numeroCartao").addEventListener("input", atualizarBandeira);
+        document.querySelector('input[name="formaPagamento"]').addEventListener("change", exibirDetalhesPagamento);
+    </script>
+
 </body>
+
 </html>
+ 
