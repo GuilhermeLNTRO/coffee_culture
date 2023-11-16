@@ -4,39 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/coffee_culture.css">
     <title>Coffee Culture - Compras</title>
-    <style>
-        /* Estilos CSS do seu código original permanecem inalterados */
-
-        .compras-section {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .quadro {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #3498db;
-            border-radius: 1em;
-            text-align: left;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .qrcode-img {
-            width: 150px;
-            height: 150px;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -151,7 +120,7 @@
 
     <script>
         function adicionarProduto() {
-            // Lógica para adicionar produtos selecionados ao carrinho
+        
             var maquinaSelecionada = document.getElementById("maquinas").value;
             var sacheSelecionado = document.getElementById("saches").value;
             var produtosSelecionados = document.getElementById("produtos-selecionados");
@@ -161,16 +130,14 @@
 
             produtosSelecionados.appendChild(divProduto);
 
-            // Lógica para atualizar o total
+    
             var totalElement = document.getElementById("total");
             var totalAtual = parseFloat(totalElement.textContent);
             totalElement.textContent = totalAtual + obterValorProduto(maquinaSelecionada, sacheSelecionado);
         }
 
         function obterValorProduto(maquina, sache) {
-            // Lógica para obter o valor do produto selecionado
-            // Você pode implementar uma lógica mais complexa aqui dependendo dos produtos
-            // Este exemplo assume um valor fixo para cada produto
+            
             var valores = {
                 EspressoDeluxe: {
                     Expresso: 50,
@@ -194,7 +161,7 @@
         }
 
         function atualizarBandeira() {
-            // Lógica para determinar a bandeira do cartão com base no número do cartão
+           
             var numeroCartao = document.getElementById("numeroCartao").value;
             var bandeiraDiv = document.getElementById("bandeira");
 
@@ -210,7 +177,7 @@
         }
 
         function exibirDetalhesPagamento() {
-            // Lógica para exibir os detalhes do tipo de pagamento selecionado
+           
             var formaPagamento = document.querySelector('input[name="formaPagamento"]:checked').value;
 
             var cartaoDetails = document.getElementById("cartao-details");
@@ -226,9 +193,9 @@
                 pixDetails.style.display = "block";
                 boletoDetails.style.display = "none";
 
-                // Lógica para gerar o QRCode do Pix
+                
                 var qrcodeImg = document.getElementById("qrcode");
-                // Substitua a URL abaixo pela lógica real de geração de QRCode
+                
                 qrcodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=150x150";
             } else if (formaPagamento === "boleto") {
                 cartaoDetails.style.display = "none";
@@ -238,26 +205,26 @@
         }
 
         function enviarCompra() {
-            // Lógica para enviar o formulário (pode ser substituída por AJAX para interação com o servidor)
+            
             alert("Compra realizada com sucesso! Obrigado pela sua compra!");
         }
 
         function limparCampos() {
-            // Lógica para limpar todos os campos do formulário
+            
             document.getElementById("compras-form").reset();
 
-            // Lógica para limpar os campos específicos que podem não ser cobertos pelo reset()
+
             document.getElementById("produtos-selecionados").innerHTML = "";
             document.getElementById("total").textContent = "0";
             document.getElementById("bandeira").textContent = "";
 
-            // Resetar detalhes de pagamento
+
             document.getElementById("cartao-details").style.display = "none";
             document.getElementById("pix-details").style.display = "none";
             document.getElementById("boleto-details").style.display = "none";
         }
 
-        // Adicionar eventos para atualizar a bandeira do cartão e exibir detalhes do pagamento
+        
         document.getElementById("numeroCartao").addEventListener("input", atualizarBandeira);
         document.querySelector('input[name="formaPagamento"]').addEventListener("change", exibirDetalhesPagamento);
     </script>
