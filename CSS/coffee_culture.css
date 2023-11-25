@@ -118,6 +118,7 @@ img{
 .quadro {
     margin: 20px 0;
     padding: 15px;
+    margin-bottom: 10%;
     border: 1px solid #3498db;
     border-radius: 1em;
     text-align: left;
@@ -138,3 +139,35 @@ img{
     height: 150px;
     margin-top: 10px;
 }
+
+
+button {
+    margin: 10px; 
+    padding: 10px 15px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    border-radius: 5px;
+    color: #ffffff; 
+}
+
+button:hover {
+    background-color: #3498db;
+}
+
+button:active {
+    background-color: #2980b9;
+}
+
+button.finalizar {
+    background-color: #27ae60; 
+}
+
+button.finalizar:hover {
+    background-color: #218c53; 
+}
+
+#botao_final{
+    margin-bottom: 5%;
+}
+
+
