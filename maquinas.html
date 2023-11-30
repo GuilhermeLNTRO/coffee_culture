@@ -5,6 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/coffee_culture.css">
+    <style>
+        /*usei o css dentro do html pq fora não arranjei forma de funcionar*/
+        .maquina-img1,
+        .maquina-img2,
+        .maquina-img3,
+        .maquina-img4,
+        #maquina-foto {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto; 
+        }
+
+        #maquina-foto[src$="Vazio.jpg"] {
+            max-width: 100px; 
+            max-height: 100px; 
+        }
+    </style>
+    <script>
+        function exibirFotoMaquina(modelo, foto, preco) {
+            document.getElementById('maquina-foto').src = 'img/' + foto;
+            document.getElementById('maquina-preco').textContent = 'Valor: R$ ' + preco;
+        }
+    </script>
     <title>Coffee Culture - Máquinas</title>
 </head>
 
@@ -22,7 +46,7 @@
     </nav>
 
     <section class="maquina-section">
-        <div class="maquina-item">
+        <div class="maquina-item" onclick="exibirFotoMaquina('Espresso Deluxe', 'maquina1.jpg', '1.549,99')">
             <h2>Máquina 1</h2>
             <p><strong>Tipo:</strong> Automática</p>
             <p><strong>Modelo:</strong> Espresso Deluxe</p>
@@ -30,7 +54,7 @@
             <p><strong>Valor:</strong> R$ 1.549,99</p>
         </div>
 
-        <div class="maquina-item">
+        <div class="maquina-item" onclick="exibirFotoMaquina('Barista Pro', 'maquina2.jpg', '799,99')">
             <h2>Máquina 2</h2>
             <p><strong>Tipo:</strong> Manual</p>
             <p><strong>Modelo:</strong> Barista Pro</p>
@@ -38,7 +62,7 @@
             <p><strong>Valor:</strong> R$ 799,99</p>
         </div>
 
-        <div class="maquina-item">
+        <div class="maquina-item" onclick="exibirFotoMaquina('CitiZ Prata', 'maquina3.jpg', '599,99')">
             <h2>Máquina 3</h2>
             <p><strong>Tipo:</strong> Capsulas</p>
             <p><strong>Modelo:</strong> CitiZ Prata</p>
@@ -46,7 +70,7 @@
             <p><strong>Valor:</strong> R$ 599,99</p>
         </div>
 
-        <div class="maquina-item">
+        <div class="maquina-item" onclick="exibirFotoMaquina('TurboShot', 'maquina4.jpg', '899,99')">
             <h2>Máquina 4</h2>
             <p><strong>Tipo:</strong> Expresso</p>
             <p><strong>Modelo:</strong> TurboShot</p>
@@ -54,11 +78,13 @@
             <p><strong>Valor:</strong> R$ 899,99</p>
         </div>
     </section>
+    <div>
+        <img id="maquina-foto" src="img/Vazio.jpg" alt="Máquina Vazia">
+        <p id="maquina-preco"></p>
+    </div>
 
     <footer class="coffee-footer">
-        <p>&copy; 2023 Coffee Culture</p>
-    </footer>
+        <p>&copy; 2023 Coffee
 
-</body>
 
-</html>
+
