@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="CSS/coffee_culture.css">
     <title>Coffee Culture - Compras</title>
 </head>
+<style>
+    #bandeira-img img{
+        width: 5%;
+    }
+</style>
 
 <body>
 
@@ -23,7 +28,6 @@
 
     <section class="compras-section">
         <form id="compras-form">
-
             <div class="quadro">
                 <h2>Dados de Identificação</h2>
                 <div class="form-group">
@@ -47,16 +51,15 @@
                     <input type="text" id="endereco" name="endereco" required>
                 </div>
             </div>
-
             <div class="quadro">
                 <h2>Produtos</h2>
                 <div class="form-group">
                     <label for="maquinas" class="label">Máquinas:</label>
                     <select id="maquinas" name="maquinas">
-                        <option value="EspressoDeluxe">Espresso Deluxe</option>
-                        <option value="BaristaPro">Barista Pro</option>
+                        <option value="ArnoMiniMe">Arno Mini Me</option>
+                        <option value="OriginalPlus">Original Plus</option>
                         <option value="CitiZPrata">CitiZ Prata</option>
-                        <option value="TurboShot">TurboShot</option>
+                        <option value="EssenzaMini">Essenza Mini</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -79,7 +82,7 @@
                 </div>
                 <button type="button" onclick="if (validarCPF()) adicionarProduto()">Selecionados</button>
                 <div id="produtos-selecionados"></div>
-                <div>Total: <span id="total">0</span></div>
+                <div>Total: R$<span id="total">0</span></div>
             </div>
 
             <div class="quadro">
@@ -95,9 +98,18 @@
                 <div id="cartao-details" style="display: none;">
                     <div class="form-group">
                         <label for="numeroCartao" class="label">Número do Cartão:</label>
-                        <input type="text" id="numeroCartao" name="numeroCartao">
+                        <input type="text" id="numeroCartao" name="numeroCartao" oninput="verificarCartao()" onkeyup="tamanhoCartao()">
+                        <div id="bandeira"></div>
                     </div>
-                    <div id="bandeira"></div>
+                    <div id="bandeira-img"></div>
+                    <div class="form-group">
+                        <label for="validadeMes" class="label">Mês de Validade:</label>
+                        <input type="text" id="validadeMes" name="validadeMes" maxlength="2" placeholder="MM">
+                    </div>
+                    <div class="form-group">
+                        <label for="validadeAno" class="label">Ano de Validade:</label>
+                        <input type="text" id="validadeAno" name="validadeAno" maxlength="4" placeholder="YYYY">
+                    </div>
                 </div>
                 <div id="pix-details" style="display: none;">
                     <p>Escanear o QRCode abaixo com o app do banco para realizar o pagamento:</p>
@@ -107,40 +119,42 @@
                     <p>Desculpe, mas o pagamento via boleto não está mais disponível.</p>
                 </div>
             </div>
+
             <div id="botao_final">
-            <button type="button" onclick="limparCampos()">Limpar Campos</button>
-            <button type="button" onclick="finalizarCompra()" class="finalizar">Finalizar Compra</button>
-            </div>   
+                <button type="button" onclick="limparCampos()">Limpar Campos</button>
+                <button type="button" onclick="confirmarCompra()" class="finalizar">Finalizar Compra</button>
+            </div>
         </form>
     </section>
 
     <footer class="coffee-footer">
         <p>&copy; 2023 Coffee Culture</p>
     </footer>
+
     <script>
         function validarCPF() {
             var cpfInput = document.getElementById("cpf");
             var cpf = cpfInput.value.replace(/[^\d]/g, '');
-    
+
             if (cpf.length !== 11 || !/^\d+$/.test(cpf)) {
                 alert("CPF inválido. Certifique-se de digitar 11 dígitos numéricos.");
                 cpfInput.focus();
                 return false;
             }
-    
+
             var identCPF = parseInt(cpf.substring(0, 9));
             var primeiro_digito = calculaDV(identCPF);
             var segundo_digito = calculaDV(identCPF * 10 + primeiro_digito);
-    
+
             if (parseInt(cpf.charAt(9)) !== primeiro_digito || parseInt(cpf.charAt(10)) !== segundo_digito) {
                 alert("CPF inválido. Dígitos de verificação incorretos.");
                 cpfInput.focus();
                 return false;
             }
-    
+
             return true;
         }
-    
+
         function calculaDV(num) {
             var resto = 0, soma = 0;
             for (i = 2; i < 11; i++) {
@@ -150,49 +164,63 @@
             resto = (soma % 11);
             return (resto > 1) ? (11 - resto) : 0;
         }
-    
+
         function adicionarProduto() {
             var maquinaSelecionada = document.getElementById("maquinas").value;
             var sacheSelecionado = document.getElementById("saches").value;
             var produtosSelecionados = document.getElementById("produtos-selecionados");
-    
+
             var divProduto = document.createElement("div");
             divProduto.textContent = maquinaSelecionada + " - " + sacheSelecionado;
-    
+
             produtosSelecionados.appendChild(divProduto);
-    
+
             var totalElement = document.getElementById("total");
             var totalAtual = parseFloat(totalElement.textContent);
-            totalElement.textContent = totalAtual + obterValorProduto(maquinaSelecionada, sacheSelecionado);
+            totalElement.textContent = totalAtual + obterValorMaquina(maquinaSelecionada) + obterValorSache(sacheSelecionado);
         }
-    
-        function obterValorProduto(maquina, sache) {
+
+        function obterValorMaquina(maquina) {
+            var valoresMaquinas = {
+                ArnoMiniMe: 349.99,
+                OriginalPlus: 399.99,
+                CitiZPrata: 387.99,
+                EssenzaMini: 429.99
+            };
+
+            return valoresMaquinas[maquina];
+        }
+
+        function obterValorSache(sache) {
             var valores = {
-                EspressoDeluxe: {
-                    Expresso: 50,
-                    Descafeinado: 60
+                DolceGusto: {
+                    Expresso: 25,
+                    Descafeinado: 21
                 },
-                BaristaPro: {
-                    Expresso: 70,
-                    Descafeinado: 80
+                Senseo: {
+                    Clássico: 14,
+                    Intenso: 14
                 },
-                CitiZPrata: {
-                    Expresso: 90,
-                    Descafeinado: 100
-                },
-                TurboShot: {
-                    Expresso: 110,
-                    Descafeinado: 120
+                Nespresso: {
+                    Livanto: 35,
+                    Ristretto: 42,
+                    Vanillo: 46
                 }
             };
-    
-            return valores[maquina][sache];
+
+            for (var marca in valores) {
+                if (valores[marca].hasOwnProperty(sache)) {
+                    return valores[marca][sache];
+                }
+            }
+
+            return 0;
         }
-    
+
         function atualizarBandeira() {
             var numeroCartao = document.getElementById("numeroCartao").value;
             var bandeiraDiv = document.getElementById("bandeira");
-    
+
             if (/^4/.test(numeroCartao)) {
                 bandeiraDiv.textContent = "Bandeira: Visa";
             } else if (/^5/.test(numeroCartao)) {
@@ -203,13 +231,15 @@
                 bandeiraDiv.textContent = "";
             }
         }
-    
+
         function exibirDetalhesPagamento() {
             var formaPagamento = document.querySelector('input[name="formaPagamento"]:checked').value;
             var cartaoDetails = document.getElementById("cartao-details");
             var pixDetails = document.getElementById("pix-details");
             var boletoDetails = document.getElementById("boleto-details");
-    
+            var pixQrCodeContainer = document.getElementById("pix-qrcode-container");
+            var boletoMessageContainer = document.getElementById("boleto-message-container");
+
             if (formaPagamento === "cartao") {
                 cartaoDetails.style.display = "block";
                 pixDetails.style.display = "none";
@@ -218,20 +248,24 @@
                 cartaoDetails.style.display = "none";
                 pixDetails.style.display = "block";
                 boletoDetails.style.display = "none";
-    
-                var qrcodeImg = document.getElementById("qrcode");
-                qrcodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=150x150";
+                pixQrCodeContainer.style.display = "block";
+                boletoMessageContainer.style.display = "none";
+
+                var pixQrCodeImg = document.getElementById("pix-qrcode");
+                pixQrCodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=150x150";
             } else if (formaPagamento === "boleto") {
                 cartaoDetails.style.display = "none";
                 pixDetails.style.display = "none";
                 boletoDetails.style.display = "block";
+                pixQrCodeContainer.style.display = "none";
+                boletoMessageContainer.style.display = "block";
             }
         }
-    
+
         function enviarCompra() {
             alert("Compra realizada com sucesso! Obrigado pela sua compra!");
         }
-    
+
         function limparCampos() {
             document.getElementById("compras-form").reset();
             document.getElementById("produtos-selecionados").innerHTML = "";
@@ -241,18 +275,80 @@
             document.getElementById("pix-details").style.display = "none";
             document.getElementById("boleto-details").style.display = "none";
         }
-    
+
         document.getElementById("numeroCartao").addEventListener("input", atualizarBandeira);
         document.querySelector('input[name="formaPagamento"]').addEventListener("change", exibirDetalhesPagamento);
 
         function finalizarCompra() {
-        if (validarCPF()) { 
+            if (validarCPF()) {
+                alert("Compra finalizada com sucesso! Obrigado pela sua compra!");
+            }
+        }
+
+        function verificarCartao() {
+            var numeroCartaoInput = document.getElementById("numeroCartao");
+            var numeroCartao = numeroCartaoInput.value.replace(/[^\d]/g, '');
+
+            if (/^4/.test(numeroCartao)) {
+                selecionarBandeira("Visa");
+            } else if (/^5[1-5]/.test(numeroCartao)) {
+                selecionarBandeira("Mastercard");
+            } else if (/^3[47]/.test(numeroCartao)) {
+                selecionarBandeira("American Express");
+            } else if (numeroCartao.length >= 1 && (numeroCartao.charAt(0) !== '3' && numeroCartao.charAt(0) !== '4' && numeroCartao.charAt(0) !== '5')) {
+                alert("Número de cartão inválido. A bandeira deve ser Visa, Mastercard ou American Express.");
+                numeroCartaoInput.value = "";
+            return;
+            }
+
+            tamanhoCartao(numeroCartao);
+        }
+
+
+        function selecionarBandeira(bandeira) {
+    var bandeiraDiv = document.getElementById("bandeira");
+    var bandeiraImgDiv = document.getElementById("bandeira-img");
+
+    var imagemBandeira = document.createElement("img");
+    var caminhoImagem = "img/" + bandeira.toLowerCase() + ".png";
+    imagemBandeira.src = caminhoImagem;
+    imagemBandeira.alt = bandeira;
+
+    bandeiraDiv.innerHTML = "";
+    bandeiraDiv.appendChild(imagemBandeira);
+
+    bandeiraImgDiv.innerHTML = "";
+    bandeiraImgDiv.appendChild(imagemBandeira);
+
+    console.log("Caminho da imagem:", caminhoImagem); 
+}
+
+        function confirmarCompra() {
+            var confirmacao = confirm("Deseja confirmar a compra?");
+
+            if (confirmacao) {
+                finalizarCompra();
+            }
+    }
+
+    function finalizarCompra() {
+        if (validarCPF()) {
+            var numeroCartaoInput = document.getElementById("numeroCartao");
+            var numeroCartao = numeroCartaoInput.value.replace(/[^\d]/g, '');
+
+            if (numeroCartao.length < 12 || numeroCartao.length > 19) {
+                alert("O número do cartão deve ter entre 12 e 19 dígitos.");
+                numeroCartaoInput.value = "";
+                return;
+            }
+
             alert("Compra finalizada com sucesso! Obrigado pela sua compra!");
         }
     }
-    
+
+        
+
     </script>
-    
 
 </body>
 

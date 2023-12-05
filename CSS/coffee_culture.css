@@ -63,7 +63,7 @@ img{
     mix-blend-mode:multiply;
 }
 .maquina-img1 {
-    width: 30%;
+    width: 31%;
     border-radius: 0.5em;
 }
 .maquina-img2 {
@@ -75,7 +75,7 @@ img{
     border-radius: 0.5em;
 }
 .maquina-img4 {
-    width: 41%;
+    width: 54%;
     border-radius: 0.5em;
 }
 .maquina-type {
@@ -166,3 +166,4 @@ button.finalizar:hover {
 #botao_final{
     margin-bottom: 5%;
 }
+
